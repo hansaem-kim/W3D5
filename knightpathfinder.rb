@@ -7,16 +7,16 @@ class KnightPathFinder
         moves = []
 
         moves << [row + 2, col + 1] if row + 2 < 8 && col + 1 < 8
-        moves << [row + 2, col - 1] if row + 2 < 8 && col + 1 < 8
+        moves << [row + 2, col - 1] if row + 2 < 8 && col - 1 >= 0
 
         moves << [row + 1, col + 2] if row + 1 < 8 && col + 2 < 8
-        moves << [row - 1, col + 2] if row - 1 > 0 && col + 2 < 8
+        moves << [row - 1, col + 2] if row - 1 >= 0 && col + 2 < 8
 
-        moves << [row - 2, col + 1] if row - 2 > 0 && col + 1 < 8
-        moves << [row - 2, col - 1] if row - 2 > 0 && col - 1 > 0
+        moves << [row - 2, col + 1] if row - 2 >= 0 && col + 1 < 8
+        moves << [row - 2, col - 1] if row - 2 >= 0 && col - 1 >= 0
 
-        moves << [row + 1, col - 2] if row + 1 < 8 && col - 2 > 0
-        moves << [row - 1, col - 2] if row - 1 > 0 && col - 2 > 0
+        moves << [row + 1, col - 2] if row + 1 < 8 && col - 2 >= 0
+        moves << [row - 1, col - 2] if row - 1 >= 0 && col - 2 >= 0
 
         moves
     end
@@ -34,7 +34,20 @@ class KnightPathFinder
     end
 
     def build_move_tree
-
+        queue = [@root_node]
+        until queue.empty?
+            first = queue.shift
+            possible_moves = new_move_positions(first.value)
+            possible_moves.each do |move|
+                child_node = PolyTreeNode.new(move)
+                first.add_child(child_node)
+                queue << child_node
+            end
+        end
     end
 
 end
+
+kfs = KnightPathFinder.new([4,4])
+
+p kfs
